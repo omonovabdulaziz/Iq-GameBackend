@@ -33,7 +33,7 @@ public class User extends AbsLong implements UserDetails {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleName roleName;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String password;
     @Column(nullable = false)
     private String phoneNumber;

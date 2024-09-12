@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Data
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "collection_id"}))
 public class UserCollection extends AbsLong {
     @ManyToOne
     @JoinColumn(nullable = false)
