@@ -2,6 +2,7 @@ package it.live.iqgame.entity;
 
 import it.live.iqgame.entity.tmp.AbsLong;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @Builder
 @Data
 public class Education extends AbsLong {
+    @Column(nullable = false, unique = true)
     private String name;
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "education", cascade = CascadeType.ALL)
