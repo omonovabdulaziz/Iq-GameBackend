@@ -1,10 +1,17 @@
 package it.live.iqgame.service.impl;
 
+import it.live.iqgame.entity.Education;
+import it.live.iqgame.entity.Subject;
+import it.live.iqgame.exception.NotFoundException;
 import it.live.iqgame.payload.ApiResponse;
 import it.live.iqgame.payload.SubjectDTOs.GetSubjectDTO;
+import it.live.iqgame.repository.EducationRepository;
+import it.live.iqgame.repository.SubjectRepository;
 import it.live.iqgame.service.SubjectService;
+import it.live.iqgame.utils.FileComposer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,28 +23,42 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
 
+    private final EducationRepository educationRepository;
+    private final SubjectRepository subjectRepository;
+
     @Override
     public ResponseEntity<ApiResponse> create(Long educId, String name, MultipartFile file) {
-        return null;
+        Education education = educationRepository.findById(educId).orElseThrow(() -> new NotFoundException("education topilmadi"));
+        String filename = FileComposer.imageUploader(file);
+        subjectRepository.save(Subject.builder().education(education).name(name).imgUrl(filename).build());
+        return ResponseEntity.ok(ApiResponse.builder().status(200).message("ok").build());
     }
 
     @Override
     public ResponseEntity<ApiResponse> update(Long subjectId, String name, MultipartFile file) {
-        return null;
+        Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new NotFoundException("subject topilmadi"));
+        subject.setName(name);
+        if (!file.isEmpty()) {
+            subject.setImgUrl(FileComposer.imageUploader(file));
+        }
+        subjectRepository.save(subject);
+        return ResponseEntity.ok(ApiResponse.builder().status(200).message("ok").build());
+
     }
 
     @Override
     public ResponseEntity<ApiResponse> delete(Long subjectId) {
-        return null;
+        subjectRepository.deleteById(subjectId);
+        return ResponseEntity.ok(ApiResponse.builder().status(200).message("deleted").build());
     }
 
     @Override
-    public Page<GetSubjectDTO> getAllSubjects() {
-        return null;
+    public Page<GetSubjectDTO> getAllSubjects(int page, int size) {
+        return subjectRepository.findAllByPage(PageRequest.of(page, size));
     }
 
     @Override
     public List<GetSubjectDTO> getSubjectByEducId(Long educId) {
-        return List.of();
+        return subjectRepository.getSubjectByEducId(educId);
     }
 }

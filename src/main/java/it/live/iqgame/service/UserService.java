@@ -25,4 +25,6 @@ public interface UserService {
     Page<AllUserDTO> getAllUsers(int page, int size);
 
     Page<AllUserDTO> search(String name, String phoneNumber, int page, int size);
+
+    Page<RatingData> rating(Long subjectId, int page, int size);
 }

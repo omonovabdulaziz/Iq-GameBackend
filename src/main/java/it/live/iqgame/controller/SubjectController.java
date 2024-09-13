@@ -34,8 +34,8 @@ public class SubjectController {
     }
 
     @GetMapping("/getAllSubjects")
-    public Page<GetSubjectDTO> getAllSubjects() {
-        return subjectService.getAllSubjects();
+    public Page<GetSubjectDTO> getAllSubjects(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return subjectService.getAllSubjects(page , size);
     }
 
     @GetMapping("/getSubjectByEducId/{educId}")

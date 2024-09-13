@@ -1,9 +1,8 @@
 package it.live.iqgame.controller;
 
 import it.live.iqgame.config.SecurityConfiguration;
-import it.live.iqgame.entity.User;
 import it.live.iqgame.mapper.UserMapper;
-import it.live.iqgame.payload.*;
+import it.live.iqgame.payload.ApiResponse;
 import it.live.iqgame.payload.UserDTOs.*;
 import it.live.iqgame.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -42,9 +41,9 @@ public class UserController {
         return userService.updateInformation(updateInformationDTO);
     }
 
-    @GetMapping("/getCurrenInformation")
-    public UserDTO getCurrentInformation() {
-        return userMapper.toDTOCurrent(SecurityConfiguration.getOwnSecurityInformation());
+    @GetMapping("/getCurrenInformation/{subjectId}")
+    public UserDTO getCurrentInformation(@PathVariable Long subjectId) {
+        return userMapper.toDTOCurrent(SecurityConfiguration.getOwnSecurityInformation(), subjectId);
     }
 
     @GetMapping("/getAllUsers")
@@ -55,5 +54,10 @@ public class UserController {
     @GetMapping("/search")
     public Page<AllUserDTO> search(@RequestParam(required = false) String name, @RequestParam(required = false) String phoneNumber, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         return userService.search(name, phoneNumber, page, size);
+    }
+
+    @GetMapping("/rating/{subjectId}")
+    public Page<RatingData> rating(@PathVariable Long subjectId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return userService.rating(subjectId , page , size);
     }
 }

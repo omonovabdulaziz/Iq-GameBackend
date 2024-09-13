@@ -2,13 +2,11 @@ package it.live.iqgame.controller;
 
 import it.live.iqgame.entity.enums.QuestionType;
 import it.live.iqgame.payload.ApiResponse;
-import it.live.iqgame.payload.QuestionDTOs.CreateQuestionDTO;
-import it.live.iqgame.payload.QuestionDTOs.GetImgQuestionDTO;
-import it.live.iqgame.payload.QuestionDTOs.GetTestQuestionDTO;
-import it.live.iqgame.payload.QuestionDTOs.UpdateQuestionDTO;
+import it.live.iqgame.payload.QuestionDTOs.*;
 import it.live.iqgame.service.QuestionsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,14 +19,19 @@ import java.util.List;
 public class QuestionsController {
     private final QuestionsService questionsService;
 
-    @PostMapping("/add/{type}")
-    public ResponseEntity<ApiResponse> createQuestion(@PathVariable QuestionType type, @RequestPart CreateQuestionDTO createQuestionDTO, @RequestParam MultipartFile file) {
-        return questionsService.createQuestion(type, createQuestionDTO, file);
+    @PostMapping(value = "/add/{type}/{levelId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse> createQuestion(@PathVariable QuestionType type, @RequestParam(required = false) MultipartFile file, @PathVariable Long levelId, @RequestParam(required = false) List<String> additiveAnswer, @RequestParam String correctAnswer) {
+        return questionsService.createQuestion(type, CreateQuestionDTO.builder().additiveAnswer(additiveAnswer).levelId(levelId).correctAnswer(correctAnswer).build(), file);
     }
 
-    @PutMapping("/update/{questionId}")
-    public ResponseEntity<ApiResponse> updateQuestion(@PathVariable Long questionId, @RequestParam MultipartFile file, @RequestPart UpdateQuestionDTO updateQuestionDTO) {
-        return questionsService.updateQuestion(questionId, file, updateQuestionDTO);
+    @PutMapping(value = "/update/{questionId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse> updateQuestion(
+            @PathVariable Long questionId,
+            @RequestParam(required = false) MultipartFile file,
+            @RequestParam String correctAnswer,
+            @RequestParam(required = false) List<String> additiveAnswer,
+            @RequestParam QuestionType questionType) {
+        return questionsService.updateQuestion(questionId, file, UpdateQuestionDTO.builder().additiveAnswer(additiveAnswer).correctAnswer(correctAnswer).questionType(questionType).build());
     }
 
     @DeleteMapping("/delete/{questionID}")
@@ -37,17 +40,17 @@ public class QuestionsController {
     }
 
     @GetMapping("/getAllImgQuestions")
-    public Page<GetImgQuestionDTO> GetAllQuestions() {
-        return questionsService.getAllImgQuestions();
+    public Page<GetImgQuestionDTO> GetAllQuestions(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return questionsService.getAllImgQuestions(page, size);
     }
 
     @GetMapping("/getAllTestQuestions")
-    public Page<GetTestQuestionDTO> getAllTestQuestions() {
-        return questionsService.getAllTestQuestions();
+    public Page<GetTestQuestionDTO> getAllTestQuestions(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return questionsService.getAllTestQuestions(page , size);
     }
 
     @GetMapping("/getQuestionByLevelId/{levelId}")
-    public List<Object> getTestQuestionByLevelId(@PathVariable Long levelId) {
+    public List<TestQuestionDTO> getTestQuestionByLevelId(@PathVariable Long levelId) {
         return questionsService.getTestQuestionByLevelId(levelId);
     }
 }

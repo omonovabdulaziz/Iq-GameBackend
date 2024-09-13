@@ -1,12 +1,15 @@
 package it.live.iqgame.mapper;
 
 import it.live.iqgame.entity.User;
+import it.live.iqgame.entity.enums.QuestionType;
 import it.live.iqgame.entity.enums.RoleName;
 import it.live.iqgame.exception.NotFoundException;
 import it.live.iqgame.payload.UserDTOs.RegisterDTO;
 import it.live.iqgame.payload.UserDTOs.UpdateInformationDTO;
 import it.live.iqgame.payload.UserDTOs.UserDTO;
+import it.live.iqgame.repository.AttemptsRepository;
 import it.live.iqgame.repository.EducationRepository;
+import it.live.iqgame.utils.CalculatingKeyBall;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,10 +19,11 @@ import org.springframework.stereotype.Service;
 public class UserMapper {
     private final PasswordEncoder passwordEncoder;
     private final EducationRepository educationRepository;
+    private final CalculatingKeyBall calculatingKeyBall;
 
     public User toEntityForRegister(RegisterDTO registerDTO) {
         String password = passwordEncoder.encode(registerDTO.getPassword());
-        return User.builder().name(registerDTO.getName()).education(educationRepository.findById(registerDTO.getEducId()).orElseThrow(() -> new NotFoundException("Education Topilmadi"))).roleName(RoleName.USER).ball(0).key(0).password(password).region(registerDTO.getRegion()).surname(registerDTO.getSurname()).phoneNumber(registerDTO.getPhoneNumber()).build();
+        return User.builder().name(registerDTO.getName()).education(educationRepository.findById(registerDTO.getEducId()).orElseThrow(() -> new NotFoundException("Education Topilmadi"))).roleName(RoleName.USER).password(password).region(registerDTO.getRegion()).surname(registerDTO.getSurname()).phoneNumber(registerDTO.getPhoneNumber()).build();
 
     }
 
@@ -34,17 +38,23 @@ public class UserMapper {
         return ownSecurityInformation;
     }
 
-    public UserDTO toDTOCurrent(User ownSecurityInformation) {
-        return UserDTO.builder()
+    public UserDTO toDTOCurrent(User ownSecurityInformation, Long subjectId) {
+        UserDTO build = UserDTO.builder()
                 .name(ownSecurityInformation.getName()).
                 surname(ownSecurityInformation.getSurname()).
                 roleName(ownSecurityInformation.getRoleName()).
                 educationId(ownSecurityInformation.getEducation().getId())
-                .ball(ownSecurityInformation.getBall())
-                .key(ownSecurityInformation.getKey())
                 .phoneNumber(ownSecurityInformation.getPhoneNumber())
                 .region(ownSecurityInformation.getRegion())
                 .avaName(ownSecurityInformation.getAvaName())
                 .build();
+        try {
+            build.setBall(calculatingKeyBall.calculate(QuestionType.TEST, ownSecurityInformation.getId(), subjectId));
+            build.setKey(calculatingKeyBall.calculate(QuestionType.IMAGE, ownSecurityInformation.getId(), subjectId));
+        } catch (Exception e) {
+            build.setBall(null);
+            build.setKey(null);
+        }
+        return build;
     }
 }

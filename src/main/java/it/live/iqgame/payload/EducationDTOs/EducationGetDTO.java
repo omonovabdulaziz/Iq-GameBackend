@@ -5,7 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -14,5 +15,5 @@ import java.util.Date;
 public class EducationGetDTO {
     private Long id;
     private String name;
-    private Date createdAt;
+    private LocalDateTime createdAt;
 }

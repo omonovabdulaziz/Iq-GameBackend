@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -16,9 +16,9 @@ public class AllUserDTO {
     private String educationName;
     private String phoneNumber;
     private String imgName;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
-    public AllUserDTO(Long id, String name, String surname, String educationName, String phoneNumber, String avaName, LocalDate createdAt) {
+    public AllUserDTO(Long id, String name, String surname, String educationName, String phoneNumber, String avaName, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.surname = surname;
