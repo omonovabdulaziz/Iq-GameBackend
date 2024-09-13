@@ -5,6 +5,8 @@ import it.live.iqgame.payload.LevelDTOs.GetLevelDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface LevelService {
 
 
@@ -14,8 +16,8 @@ public interface LevelService {
 
     ResponseEntity<ApiResponse> delete(Long levelId);
 
-    Page<GetLevelDTO> getAllLevels();
+    Page<GetLevelDTO> getAllLevels(int page, int size);
 
 
-    Page<GetLevelDTO> getAllByCollectionId(Long collectionId);
+    List<GetLevelDTO> getAllByCollectionId(Long collectionId);
 }

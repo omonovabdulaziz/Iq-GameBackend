@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/level")
@@ -30,12 +32,12 @@ public class LevelController {
     }
 
     @GetMapping("/getAllLevels")
-    public Page<GetLevelDTO> getAllLevels() {
-        return levelService.getAllLevels();
+    public Page<GetLevelDTO> getAllLevels(@RequestParam(defaultValue = "0") int page , @RequestParam(defaultValue = "10") int size) {
+        return levelService.getAllLevels(page , size);
     }
 
     @GetMapping("/getAllByCollectionId/{collectionId}")
-    public Page<GetLevelDTO> getAllByCollectionId(@PathVariable Long collectionId) {
+    public List<GetLevelDTO> getAllByCollectionId(@PathVariable Long collectionId) {
         return levelService.getAllByCollectionId(collectionId);
     }
 }

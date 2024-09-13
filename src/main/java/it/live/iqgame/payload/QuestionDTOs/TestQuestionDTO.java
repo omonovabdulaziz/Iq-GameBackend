@@ -12,8 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UpdateQuestionDTO {
+public class TestQuestionDTO {
+    private Long id;
     private String correctAnswer;
-    private List<String> additiveAnswer;
+    private String imgUrl;
     private QuestionType questionType;
+    private List<String> additiveAnswer;
+    private int correctAnswerLength;
+
 }

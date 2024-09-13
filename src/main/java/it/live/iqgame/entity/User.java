@@ -37,10 +37,6 @@ public class User extends AbsLong implements UserDetails {
     private String password;
     @Column(nullable = false)
     private String phoneNumber;
-    @Column(nullable = false)
-    private Integer ball;
-    @Column(nullable = false)
-    private Integer key;
     private String avaName;
 
     @Override

@@ -31,8 +31,7 @@ public class Question extends AbsLong {
 
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(
-            columnDefinition = "text[]",
-            nullable = false
+            columnDefinition = "text[]"
     )
     private List<String> additiveAnswers;
 }

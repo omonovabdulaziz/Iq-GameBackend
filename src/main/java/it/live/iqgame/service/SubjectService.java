@@ -19,7 +19,7 @@ public interface SubjectService {
     ResponseEntity<ApiResponse> delete(Long subjectId);
 
 
-    Page<GetSubjectDTO> getAllSubjects();
+    Page<GetSubjectDTO> getAllSubjects(int page , int size);
 
 
     List<GetSubjectDTO> getSubjectByEducId(Long educId);

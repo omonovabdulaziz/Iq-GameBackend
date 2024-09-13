@@ -54,9 +54,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<ApiResponse> updateAvatar(MultipartFile file) {
         User currentUser = SecurityConfiguration.getOwnSecurityInformation();
-        String extension = Objects.requireNonNull(file.getContentType()).split("/")[1];
-        String name = UUID.randomUUID() + "." + extension;
-        FileComposer.imageUploader(name, file);
+        String name = FileComposer.imageUploader(file);
         currentUser.setAvaName(name);
         userRepository.save(currentUser);
         return ResponseEntity.ok(ApiResponse.builder().status(200).message("ok").build());

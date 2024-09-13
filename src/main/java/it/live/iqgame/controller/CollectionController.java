@@ -10,15 +10,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/collection")
 public class CollectionController {
-    private CollectionService collectionService;
+    private final CollectionService collectionService;
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> create(@RequestBody CollectionCreateDTO collectionCreateDTO) {
-        return collectionService.create(collectionService);
+        return collectionService.create(collectionCreateDTO);
     }
 
     @PutMapping("/update/{collectionId}")
@@ -38,7 +40,7 @@ public class CollectionController {
 
 
     @GetMapping("/getCollectionsBySubjectId/{subjectId}")
-    public Page<GetCollectionDTO> getCollectionBySubId(@PathVariable Long subjectId) {
+    public List<Object> getCollectionBySubId(@PathVariable Long subjectId) {
         return collectionService.getCollectionBySubId(subjectId);
     }
 }
