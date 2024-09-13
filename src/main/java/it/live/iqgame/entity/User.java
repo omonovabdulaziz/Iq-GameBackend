@@ -28,7 +28,7 @@ public class User extends AbsLong implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Region region;
     @JoinColumn(nullable = false)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Education education;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -41,6 +41,7 @@ public class User extends AbsLong implements UserDetails {
     private Integer ball;
     @Column(nullable = false)
     private Integer key;
+    private String avaName;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
