@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 public interface UserService {
 
 
@@ -16,11 +18,11 @@ public interface UserService {
 
     ResponseEntity<ApiResponse> login(LoginDTO loginDTO);
 
-    ResponseEntity<ApiResponse> updateAvatar(MultipartFile file);
+    ResponseEntity<ApiResponse> updateAvatar(MultipartFile file) throws IOException;
 
     ResponseEntity<ApiResponse> updateInformation(UpdateInformationDTO updateInformationDTO);
 
     Page<AllUserDTO> getAllUsers(int page, int size);
 
-    Page<AllUserDTO> search(String name, String phoneNumber);
+    Page<AllUserDTO> search(String name, String phoneNumber, int page, int size);
 }
