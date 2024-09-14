@@ -8,6 +8,7 @@ import it.live.iqgame.service.CollectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,21 +19,25 @@ import java.util.List;
 public class CollectionController {
     private final CollectionService collectionService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> create(@RequestBody CollectionCreateDTO collectionCreateDTO) {
         return collectionService.create(collectionCreateDTO);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/update/{collectionId}")
     public ResponseEntity<ApiResponse> update(@PathVariable Long collectionId, @RequestBody CollectionUpdateDTO collectionUpdateDTO) {
         return collectionService.update(collectionId, collectionUpdateDTO);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete/{collectionId}")
     public ResponseEntity<ApiResponse> delete(@PathVariable Long collectionId) {
         return collectionService.delete(collectionId);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/getAllCollections")
     public Page<GetCollectionDTO> getAllCollection(@RequestParam int page, @RequestParam int size) {
         return collectionService.getAllCollection(page, size);

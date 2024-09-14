@@ -6,24 +6,21 @@ import it.live.iqgame.exception.NotFoundException;
 import it.live.iqgame.jwt.JwtProvider;
 import it.live.iqgame.mapper.UserMapper;
 import it.live.iqgame.payload.ApiResponse;
-import it.live.iqgame.payload.UserDTOs.AllUserDTO;
-import it.live.iqgame.payload.UserDTOs.LoginDTO;
-import it.live.iqgame.payload.UserDTOs.RegisterDTO;
-import it.live.iqgame.payload.UserDTOs.UpdateInformationDTO;
+import it.live.iqgame.payload.UserDTOs.*;
 import it.live.iqgame.repository.UserRepository;
 import it.live.iqgame.service.UserService;
 import it.live.iqgame.utils.FileComposer;
+import it.live.iqgame.utils.JdbcConnector;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.List;
 
 
 @Service
@@ -33,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
+    private final JdbcConnector jdbcConnector;
 
 
     @Override
@@ -74,5 +72,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<AllUserDTO> search(String name, String phoneNumber, int page, int size) {
         return userRepository.searchByNameOrPhoneNumber(name, phoneNumber, PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<RatingData> rating(Long subjectId, int page, int size) {
+        List<RatingData> rating = jdbcConnector.getRating(subjectId, page, size);
+        int totalCount = jdbcConnector.getTotalCount(subjectId);
+        return new PageImpl<>(rating, PageRequest.of(page, size), totalCount);
     }
 }

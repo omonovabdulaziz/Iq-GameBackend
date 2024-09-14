@@ -41,8 +41,9 @@ public class User extends AbsLong implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(roleName.name()));
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + roleName.name()));
     }
+
 
     @Override
     public String getPassword() {

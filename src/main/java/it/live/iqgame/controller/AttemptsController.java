@@ -6,6 +6,7 @@ import it.live.iqgame.service.AttemptsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,8 +20,14 @@ public class AttemptsController {
         return attemptsService.create(questionId, userAnswer);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/getAllAttemptsByUserId/{userId}")
     public Page<GetAttemptsDTO> getAttempt(@PathVariable Long userId) {
         return attemptsService.getAttempt(userId);
+    }
+
+    @GetMapping("/getUserTTL")
+    public ResponseEntity<ApiResponse> getTTl() {
+        return attemptsService.getTTL();
     }
 }

@@ -1,10 +1,7 @@
 package it.live.iqgame.service;
 
 import it.live.iqgame.payload.*;
-import it.live.iqgame.payload.UserDTOs.AllUserDTO;
-import it.live.iqgame.payload.UserDTOs.LoginDTO;
-import it.live.iqgame.payload.UserDTOs.RegisterDTO;
-import it.live.iqgame.payload.UserDTOs.UpdateInformationDTO;
+import it.live.iqgame.payload.UserDTOs.*;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;

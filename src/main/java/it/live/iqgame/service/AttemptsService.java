@@ -11,4 +11,7 @@ public interface AttemptsService {
     ResponseEntity<ApiResponse> create(Long questionId, String userAnswer);
 
     Page<GetAttemptsDTO> getAttempt(Long userId);
+
+    ResponseEntity<ApiResponse> getTTL();
+
 }
