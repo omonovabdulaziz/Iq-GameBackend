@@ -29,8 +29,8 @@ public class AttemptsServiceImpl implements AttemptsService {
 
     @Override
     public ResponseEntity<ApiResponse> create(Long questionId, String userAnswer) {
-        User user = SecurityConfiguration.getOwnSecurityInformation();
         Question question = questionsRepository.findById(questionId).orElseThrow(() -> new NotFoundException("Question topilmadi"));
+        User user = SecurityConfiguration.getOwnSecurityInformation();
         Attempts attempts = new Attempts();
         attempts.setQuestion(question);
         attempts.setSubject(question.getLevel().getCollection().getSubject());
@@ -49,6 +49,7 @@ public class AttemptsServiceImpl implements AttemptsService {
         }
         attemptsRepository.save(attempts);
         return ResponseEntity.ok(ApiResponse.builder().status(200).message("ok").object(question.getCorrectAnswer().equalsIgnoreCase(userAnswer)).build());
+
     }
 
     @Override
@@ -60,7 +61,7 @@ public class AttemptsServiceImpl implements AttemptsService {
     public ResponseEntity<ApiResponse> getTTL() {
         String key = SecurityConfiguration.getOwnSecurityInformation().getId().toString();
         Long ttl = redisUtils.getTTL(key);
-            if (ttl == null || ttl < 0) {
+        if (ttl == null || ttl < 0) {
             return ResponseEntity.ok(new ApiResponse("ok", null, 200));
         }
         ApiResponse response = new ApiResponse("ok", ttl, 200);

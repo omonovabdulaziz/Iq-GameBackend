@@ -23,7 +23,6 @@ public class AttemptsController {
             description = "Submits an attempt for a specific question with the user's answer.",
             tags = {"Attempts Management"}
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/create/{questionId}")
     public ResponseEntity<ApiResponse> create(@PathVariable Long questionId, @RequestParam String userAnswer) {
         return attemptsService.create(questionId, userAnswer);
@@ -45,6 +44,7 @@ public class AttemptsController {
             description = "Retrieves the Time-to-Live (TTL) for user attempts.",
             tags = {"Attempts Management"}
     )
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/getUserTTL")
     public ResponseEntity<ApiResponse> getTTl() {
         return attemptsService.getTTL();

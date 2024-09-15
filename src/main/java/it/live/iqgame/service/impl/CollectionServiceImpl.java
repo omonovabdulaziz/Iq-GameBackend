@@ -57,12 +57,15 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public List<Object> getCollectionBySubId(Long subjectId) {
+    public List<Object> getCollectionBySubId(Long subjectId, Boolean isDemo) {
+        if (isDemo) {
+            return Collections.singletonList(collectionRepository.findAllBySubjectId(subjectId));
+        }
         User currectuser = SecurityConfiguration.getOwnSecurityInformation();
         if (currectuser.getRoleName() == RoleName.ADMIN) {
             return Collections.singletonList(collectionRepository.findAllBySubjectId(subjectId));
         } else {
-            return Collections.singletonList(collectionRepository.findAllBySubjectIdWhereStudentNotFinished(subjectId , currectuser.getId()));
+            return Collections.singletonList(collectionRepository.findAllBySubjectIdWhereStudentNotFinished(subjectId, currectuser.getId()));
         }
     }
 }

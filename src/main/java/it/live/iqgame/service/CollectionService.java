@@ -20,5 +20,5 @@ public interface CollectionService {
 
     Page<GetCollectionDTO> getAllCollection(int page, int size);
 
-    List<Object> getCollectionBySubId(Long subjectId);
+    List<Object> getCollectionBySubId(Long subjectId , Boolean isDemo);
 }
