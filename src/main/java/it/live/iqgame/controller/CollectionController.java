@@ -72,7 +72,7 @@ public class CollectionController {
             tags = {"Collection Management"}
     )
     @GetMapping("/getCollectionsBySubjectId/{subjectId}")
-    public List<Object> getCollectionBySubId(@PathVariable Long subjectId) {
-        return collectionService.getCollectionBySubId(subjectId);
+    public List<Object> getCollectionBySubId(@PathVariable Long subjectId , @RequestParam Boolean isDemo) {
+        return collectionService.getCollectionBySubId(subjectId , isDemo);
     }
 }
