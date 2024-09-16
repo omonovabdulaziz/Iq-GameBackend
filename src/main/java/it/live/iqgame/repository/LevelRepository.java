@@ -14,16 +14,17 @@ import java.util.List;
 public interface LevelRepository extends JpaRepository<Level, Long> {
 
     @Query(value = "SELECT new it.live.iqgame.payload.LevelDTOs.GetLevelDTO(l.id, l.title, l.collection.title, l.collection.subject.education.name, count(q)) " +
-            "FROM Level l JOIN Question q ON l.id = q.level.id " +
+            "FROM Level l LEFT JOIN Question q ON l.id = q.level.id " +
             "GROUP BY l.id, l.title, l.collection.title, l.collection.subject.education.name " +
             "ORDER BY l.createdAt ASC")
     Page<GetLevelDTO> findAllLevels(Pageable pageable);
 
     @Query(value = "SELECT new it.live.iqgame.payload.LevelDTOs.GetLevelDTO(l.id, l.title, l.collection.title, l.collection.subject.education.name, count(q)) " +
-            "FROM Level l JOIN Question q ON l.id = q.level.id " +
+            "FROM Level l LEFT JOIN Question q ON l.id = q.level.id " +
             "WHERE l.collection.id = :collectionID " +
             "GROUP BY l.id, l.title, l.collection.title, l.collection.subject.education.name " +
             "ORDER BY l.createdAt ASC")
     List<GetLevelDTO> findAllByCollectionId(@Param("collectionID") Long collectionID);
+
 
 }
