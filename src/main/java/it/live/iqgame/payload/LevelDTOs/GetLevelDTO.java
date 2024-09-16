@@ -14,4 +14,5 @@ public class GetLevelDTO {
     private String title;
     private String collectionName;
     private String educationName;
+    private Long questionCount;
 }
