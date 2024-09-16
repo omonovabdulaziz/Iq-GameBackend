@@ -1,6 +1,7 @@
 package it.live.iqgame.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.live.iqgame.entity.enums.QuestionType;
 import it.live.iqgame.payload.ApiResponse;
 import it.live.iqgame.payload.QuestionDTOs.*;
@@ -18,13 +19,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/demoQuestion")
 @RequiredArgsConstructor
+@Tag(name = "DemoQuestion Management", description = "APIs for managing DemoQuestions")
 public class DemoQuestionsController {
     private final DemoQuestionService demoQuestionService;
 
     @Operation(
             summary = "Create a new demo question (Accessible by ROLE_ADMIN)",
-            description = "Creates a new demo question with the provided type, level ID, and other details. Optionally includes a file.",
-            tags = {"Question Management"}
+            description = "Creates a new demo question with the provided type, level ID, and other details. Optionally includes a file."
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = "/add/{type}/{levelId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -43,8 +44,7 @@ public class DemoQuestionsController {
 
     @Operation(
             summary = "Update an existing demo  question (Accessible by ROLE_ADMIN)",
-            description = "Updates the demo  question with the specified ID using the provided details and optional file.",
-            tags = {"Question Management"}
+            description = "Updates the demo  question with the specified ID using the provided details and optional file."
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/update/{questionId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -63,8 +63,7 @@ public class DemoQuestionsController {
 
     @Operation(
             summary = "Delete a demo question (Accessible by ROLE_ADMIN)",
-            description = "Deletes the demo  question with the specified ID.",
-            tags = {"Question Management"}
+            description = "Deletes the demo  question with the specified ID."
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete/{questionID}")
@@ -74,8 +73,7 @@ public class DemoQuestionsController {
 
     @Operation(
             summary = "Get all demo image questions (Accessible by ROLE_ADMIN)",
-            description = "Retrieves a paginated list of all demo image-based questions.",
-            tags = {"Question Management"}
+            description = "Retrieves a paginated list of all demo image-based questions."
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/getAllImgQuestions")
@@ -85,8 +83,7 @@ public class DemoQuestionsController {
 
     @Operation(
             summary = "Get all test demo questions (Accessible by ROLE_ADMIN)",
-            description = "Retrieves a paginated list of all demo test-based questions.",
-            tags = {"Question Management"}
+            description = "Retrieves a paginated list of all demo test-based questions."
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/getAllTestQuestions")
@@ -96,8 +93,7 @@ public class DemoQuestionsController {
 
     @Operation(
             summary = "Get test demo questions by level ID (Accessible by ROLE_ADMIN and ROLE_USER)",
-            description = "Retrieves a list of test demo questions associated with the given level ID.",
-            tags = {"Question Management"}
+            description = "Retrieves a list of test demo questions associated with the given level ID."
     )
     @GetMapping("/getQuestionByLevelId/{levelId}")
     public List<TestQuestionDTO> getTestQuestionByLevelId(@PathVariable Long levelId) {
