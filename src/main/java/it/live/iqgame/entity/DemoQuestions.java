@@ -21,6 +21,8 @@ public class DemoQuestions extends AbsLong {
     private QuestionType questionType;
 
     private String imgUrl;
+    @Column(columnDefinition = "TEXT")
+    private String questionValue;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)

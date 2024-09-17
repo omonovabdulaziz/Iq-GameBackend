@@ -34,11 +34,13 @@ public class DemoQuestionsController {
             @RequestParam(required = false) MultipartFile file,
             @PathVariable Long levelId,
             @RequestParam(required = false) List<String> additiveAnswer,
-            @RequestParam String correctAnswer) {
+            @RequestParam String correctAnswer,
+            @RequestParam String questionValue) {
         return demoQuestionService.createQuestion(type, CreateQuestionDTO.builder()
                 .additiveAnswer(additiveAnswer)
                 .levelId(levelId)
                 .correctAnswer(correctAnswer)
+                .questionValue(questionValue)
                 .build(), file);
     }
 
@@ -53,11 +55,13 @@ public class DemoQuestionsController {
             @RequestParam(required = false) MultipartFile file,
             @RequestParam String correctAnswer,
             @RequestParam(required = false) List<String> additiveAnswer,
-            @RequestParam QuestionType questionType) {
+            @RequestParam QuestionType questionType,
+            @RequestParam String questionValue) {
         return demoQuestionService.updateQuestion(questionId, file, UpdateQuestionDTO.builder()
                 .additiveAnswer(additiveAnswer)
                 .correctAnswer(correctAnswer)
                 .questionType(questionType)
+                .questionValue(questionValue)
                 .build());
     }
 
