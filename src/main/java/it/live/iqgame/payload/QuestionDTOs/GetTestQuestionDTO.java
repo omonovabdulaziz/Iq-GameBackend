@@ -15,4 +15,5 @@ public class GetTestQuestionDTO {
     private Long id;
     private String correctAnswer;
     private List<String> additiveAnswer;
+    private String questionValue;
 }

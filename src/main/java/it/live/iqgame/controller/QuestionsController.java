@@ -35,11 +35,13 @@ public class QuestionsController {
             @RequestParam(required = false) MultipartFile file,
             @PathVariable Long levelId,
             @RequestParam(required = false) List<String> additiveAnswer,
-            @RequestParam String correctAnswer) {
+            @RequestParam String correctAnswer,
+            @RequestParam String questionValue) {
         return questionsService.createQuestion(type, CreateQuestionDTO.builder()
                 .additiveAnswer(additiveAnswer)
                 .levelId(levelId)
                 .correctAnswer(correctAnswer)
+                .questionValue(questionValue)
                 .build(), file);
     }
 

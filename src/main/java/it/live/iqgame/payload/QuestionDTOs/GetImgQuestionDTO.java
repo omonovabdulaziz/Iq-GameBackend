@@ -15,4 +15,5 @@ public class GetImgQuestionDTO {
     private String imgName;
     private String correctAnswer;
     private GetLevelDTO getLevelDTO;
+    private String questionValue;
 }

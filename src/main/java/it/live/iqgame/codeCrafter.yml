@@ -1,5 +1,4 @@
-
-event:   
+event:
   creating_package_files:
     state: off
     flow:

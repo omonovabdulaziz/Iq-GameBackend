@@ -22,6 +22,8 @@ public class Question extends AbsLong {
 
     private String imgUrl;
 
+    @Column(columnDefinition = "TEXT")
+    private String questionValue;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private Level level;
