@@ -19,4 +19,5 @@ public class TestQuestionDTO {
     private QuestionType questionType;
     private List<String> additiveAnswer;
     private int correctAnswerLength;
+    private String questionValue;
 }

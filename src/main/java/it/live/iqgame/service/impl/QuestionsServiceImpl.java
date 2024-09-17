@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -45,6 +44,7 @@ public class QuestionsServiceImpl implements QuestionsService {
         }
         question.setAdditiveAnswers(createQuestionDTO.getAdditiveAnswer());
         question.setCorrectAnswer(createQuestionDTO.getCorrectAnswer());
+        question.setQuestionValue(createQuestionDTO.getQuestionValue());
         questionsRepository.save(question);
         return ResponseEntity.ok(ApiResponse.builder().status(200).message("ok").build());
     }
@@ -57,6 +57,7 @@ public class QuestionsServiceImpl implements QuestionsService {
         question.setCorrectAnswer(updateQuestionDTO.getCorrectAnswer());
         question.setQuestionType(updateQuestionDTO.getQuestionType());
         question.setAdditiveAnswers(updateQuestionDTO.getAdditiveAnswer());
+        question.setQuestionValue(updateQuestionDTO.getQuestionValue());
         if (file != null) question.setImgUrl(FileComposer.imageUploader(file));
         questionsRepository.save(question);
         return ResponseEntity.ok(ApiResponse.builder().status(200).message("ok").build());
@@ -73,15 +74,14 @@ public class QuestionsServiceImpl implements QuestionsService {
         Page<Question> questionPage = questionsRepository.findAllByQuestionType(QuestionType.IMAGE, PageRequest.of(page, size));
         return questionPage.map(question -> {
             GetLevelDTO getLevelDTO = GetLevelDTO.builder().id(question.getLevel().getId()).title(question.getLevel().getTitle()).collectionName(question.getLevel().getCollection().getTitle()).educationName(question.getLevel().getCollection().getSubject().getEducation().getName()).build();
-
-            return GetImgQuestionDTO.builder().id(question.getId()).imgName(question.getImgUrl()).correctAnswer(question.getCorrectAnswer()).getLevelDTO(getLevelDTO).build();
+            return GetImgQuestionDTO.builder().id(question.getId()).imgName(question.getImgUrl()).correctAnswer(question.getCorrectAnswer()).getLevelDTO(getLevelDTO).questionValue(question.getQuestionValue()).build();
         });
     }
 
     @Override
     public Page<GetTestQuestionDTO> getAllTestQuestions(int page, int size) {
         Page<Question> questionPage = questionsRepository.findAllByQuestionType(QuestionType.TEST, PageRequest.of(page, size));
-        return questionPage.map(question -> GetTestQuestionDTO.builder().id(question.getId()).correctAnswer(question.getCorrectAnswer()).additiveAnswer(question.getAdditiveAnswers()).build());
+        return questionPage.map(question -> GetTestQuestionDTO.builder().id(question.getId()).correctAnswer(question.getCorrectAnswer()).additiveAnswer(question.getAdditiveAnswers()).questionValue(question.getQuestionValue()).build());
     }
 
 
@@ -98,6 +98,7 @@ public class QuestionsServiceImpl implements QuestionsService {
                         .questionType(question.getQuestionType())
                         .additiveAnswer(question.getAdditiveAnswers())
                         .correctAnswerLength(question.getCorrectAnswer().length())
+                        .questionValue(question.getQuestionValue())
                         .build())
                 .collect(Collectors.toList());
         if (systemUser.getRoleName() == RoleName.ADMIN) {

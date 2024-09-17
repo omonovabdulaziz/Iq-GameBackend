@@ -18,4 +18,5 @@ public class CreateQuestionDTO {
     private List<String> additiveAnswer;
     @NotNull(message = "To'gri javobni  kiriting")
     private String correctAnswer;
+    private String questionValue;
 }

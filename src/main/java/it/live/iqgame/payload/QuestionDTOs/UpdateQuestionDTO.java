@@ -16,4 +16,5 @@ public class UpdateQuestionDTO {
     private String correctAnswer;
     private List<String> additiveAnswer;
     private QuestionType questionType;
+    private String questionValue;
 }
