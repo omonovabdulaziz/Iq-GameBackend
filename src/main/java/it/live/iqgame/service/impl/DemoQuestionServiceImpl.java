@@ -32,7 +32,9 @@ public class DemoQuestionServiceImpl implements DemoQuestionService {
             throw new NotFoundException("Siz Image question tangladingiz va rasm qo'shishingiz shart");
         DemoQuestions demoQuestion = new DemoQuestions();
         demoQuestion.setQuestionType(type);
+        demoQuestion.setQuestionValue(createQuestionDTO.getQuestionValue());
         demoQuestion.setLevel(levelRepository.save(levelRepository.findById(createQuestionDTO.getLevelId()).orElseThrow(() -> new NotFoundException("Level topilmadi"))));
+
         if (file != null) {
             demoQuestion.setImgUrl(FileComposer.imageUploader(file));
         }
@@ -50,6 +52,7 @@ public class DemoQuestionServiceImpl implements DemoQuestionService {
         question.setCorrectAnswer(updateQuestionDTO.getCorrectAnswer());
         question.setQuestionType(updateQuestionDTO.getQuestionType());
         question.setAdditiveAnswers(updateQuestionDTO.getAdditiveAnswer());
+        question.setQuestionValue(updateQuestionDTO.getQuestionValue());
         if (file != null) question.setImgUrl(FileComposer.imageUploader(file));
         demoQuestionRepository.save(question);
         return ResponseEntity.ok(ApiResponse.builder().status(200).message("ok").build());
@@ -90,6 +93,7 @@ public class DemoQuestionServiceImpl implements DemoQuestionService {
                         .questionType(question.getQuestionType())
                         .additiveAnswer(question.getAdditiveAnswers())
                         .correctAnswerLength(question.getCorrectAnswer().length())
+                        .questionValue(question.getQuestionValue())
                         .build())
                 .toList();
     }
