@@ -1,7 +1,10 @@
 package it.live.iqgame.service.impl;
 
+import it.live.iqgame.config.SecurityConfiguration;
 import it.live.iqgame.entity.Education;
 import it.live.iqgame.entity.Subject;
+import it.live.iqgame.entity.User;
+import it.live.iqgame.entity.enums.RoleName;
 import it.live.iqgame.exception.NotFoundException;
 import it.live.iqgame.payload.ApiResponse;
 import it.live.iqgame.payload.SubjectDTOs.GetSubjectDTO;
@@ -10,6 +13,7 @@ import it.live.iqgame.repository.SubjectRepository;
 import it.live.iqgame.service.SubjectService;
 import it.live.iqgame.utils.FileComposer;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.parsers.ReturnTypeParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     private final EducationRepository educationRepository;
     private final SubjectRepository subjectRepository;
+    private final ReturnTypeParser genericReturnTypeParser;
 
     @Override
     public ResponseEntity<ApiResponse> create(Long educId, String name, MultipartFile file) {
@@ -59,6 +64,10 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public List<GetSubjectDTO> getSubjectByEducId(Long educId) {
-        return subjectRepository.getSubjectByEducId(educId);
+        User systemUser = SecurityConfiguration.getOwnSecurityInformation();
+        if (systemUser.getRoleName() == RoleName.ADMIN && educId != null) {
+            return subjectRepository.getSubjectByEducId(educId);
+        }
+        return subjectRepository.getSubjectByEducId(systemUser.getEducation().getId());
     }
 }

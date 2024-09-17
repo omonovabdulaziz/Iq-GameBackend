@@ -62,7 +62,7 @@ public class SubjectController {
     )
     @GetMapping("/getAllSubjects")
     public Page<GetSubjectDTO> getAllSubjects(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return subjectService.getAllSubjects(page , size);
+        return subjectService.getAllSubjects(page, size);
     }
 
     @Operation(
@@ -70,8 +70,8 @@ public class SubjectController {
             description = "Retrieves a list of subjects associated with the given education ID.",
             tags = {"Subject Management"}
     )
-    @GetMapping("/getSubjectByEducId/{educId}")
-    public List<GetSubjectDTO> getSubjectByEducId(@PathVariable Long educId) {
+    @GetMapping("/getSubjectByEducId")
+    public List<GetSubjectDTO> getSubjectByEducId(@RequestParam(required = false) Long educId) {
         return subjectService.getSubjectByEducId(educId);
     }
 }
