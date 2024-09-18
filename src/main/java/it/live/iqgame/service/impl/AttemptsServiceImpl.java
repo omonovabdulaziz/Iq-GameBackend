@@ -49,7 +49,6 @@ public class AttemptsServiceImpl implements AttemptsService {
         }
         attemptsRepository.save(attempts);
         return ResponseEntity.ok(ApiResponse.builder().status(200).message("ok").object(question.getCorrectAnswer().equalsIgnoreCase(userAnswer)).build());
-
     }
 
     @Override

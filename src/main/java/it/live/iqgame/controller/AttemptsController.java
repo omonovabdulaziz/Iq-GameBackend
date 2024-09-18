@@ -24,7 +24,7 @@ public class AttemptsController {
             tags = {"Attempts Management"}
     )
     @PostMapping("/create/{questionId}")
-    public ResponseEntity<ApiResponse> create(@PathVariable Long questionId, @RequestParam String userAnswer) {
+    public ResponseEntity<ApiResponse> create(@PathVariable Long questionId, @RequestBody String userAnswer) {
         return attemptsService.create(questionId, userAnswer);
     }
 
