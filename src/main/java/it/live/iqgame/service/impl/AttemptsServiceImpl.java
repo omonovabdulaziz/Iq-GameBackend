@@ -2,6 +2,7 @@ package it.live.iqgame.service.impl;
 
 import it.live.iqgame.config.SecurityConfiguration;
 import it.live.iqgame.entity.*;
+import it.live.iqgame.exception.MainException;
 import it.live.iqgame.exception.NotFoundException;
 import it.live.iqgame.payload.ApiResponse;
 import it.live.iqgame.payload.AttemptDTOs.GetAttemptsDTO;
@@ -31,6 +32,10 @@ public class AttemptsServiceImpl implements AttemptsService {
     public ResponseEntity<ApiResponse> create(Long questionId, String userAnswer) {
         Question question = questionsRepository.findById(questionId).orElseThrow(() -> new NotFoundException("Question topilmadi"));
         User user = SecurityConfiguration.getOwnSecurityInformation();
+        Object isLocked = redisUtils.find(user.getId().toString());
+        if (isLocked != null) {
+            throw new MainException("You are LOCKED please wait" + redisUtils.getTTL(user.getId().toString()) + " second");
+        }
         Attempts attempts = new Attempts();
         attempts.setQuestion(question);
         attempts.setSubject(question.getLevel().getCollection().getSubject());
