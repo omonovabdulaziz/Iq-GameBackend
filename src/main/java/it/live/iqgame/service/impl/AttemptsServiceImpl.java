@@ -2,14 +2,14 @@ package it.live.iqgame.service.impl;
 
 import it.live.iqgame.config.SecurityConfiguration;
 import it.live.iqgame.entity.*;
+import it.live.iqgame.entity.enums.QuestionType;
 import it.live.iqgame.exception.MainException;
 import it.live.iqgame.exception.NotFoundException;
 import it.live.iqgame.payload.ApiResponse;
 import it.live.iqgame.payload.AttemptDTOs.GetAttemptsDTO;
-import it.live.iqgame.repository.AttemptsRepository;
-import it.live.iqgame.repository.QuestionsRepository;
-import it.live.iqgame.repository.UserCollectionRepository;
+import it.live.iqgame.repository.*;
 import it.live.iqgame.service.AttemptsService;
+import it.live.iqgame.utils.CalculatingKeyBall;
 import it.live.iqgame.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -27,6 +28,9 @@ public class AttemptsServiceImpl implements AttemptsService {
     private final QuestionsRepository questionsRepository;
     private final RedisUtils redisUtils;
     private final UserCollectionRepository userCollectionRepository;
+    private final UsedKeyRepository usedKeyRepository;
+    private final CalculatingKeyBall calculatingKeyBall;
+    private final SubjectRepository subjectRepository;
 
     @Override
     public ResponseEntity<ApiResponse> create(Long questionId, String userAnswer) {
@@ -34,7 +38,7 @@ public class AttemptsServiceImpl implements AttemptsService {
         User user = SecurityConfiguration.getOwnSecurityInformation();
         Object isLocked = redisUtils.find(user.getId().toString());
         if (isLocked != null) {
-            throw new MainException("You are LOCKED please wait" + redisUtils.getTTL(user.getId().toString()) + " second");
+            throw new MainException("You are LOCKED please wait " + redisUtils.getTTL(user.getId().toString()) + " second");
         }
         Attempts attempts = new Attempts();
         attempts.setQuestion(question);
@@ -70,5 +74,24 @@ public class AttemptsServiceImpl implements AttemptsService {
         }
         ApiResponse response = new ApiResponse("ok", ttl, 200);
         return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> useKey(Long subjectId) {
+        User systemUser = SecurityConfiguration.getOwnSecurityInformation();
+        Long usedKeyCount = usedKeyRepository.countAllByUserIdAndSubjectId(systemUser.getId(), subjectId);
+        long keysUser = usedKeyCount - calculatingKeyBall.calculate(QuestionType.IMAGE, systemUser.getId(), subjectId);
+        if (keysUser < 0)
+            throw new MainException("You have not enough key");
+        Optional<UsedKey> optionalUsedKey = usedKeyRepository.findByUserIdAndSubjectId(systemUser.getId(), subjectId);
+        if (optionalUsedKey.isPresent()) {
+            UsedKey usedKey = optionalUsedKey.get();
+            usedKey.setCount(usedKey.getCount() + 1);
+            usedKeyRepository.save(usedKey);
+            return ResponseEntity.ok(ApiResponse.builder().message("ok").status(200).object(true).build());
+        } else {
+            usedKeyRepository.save(UsedKey.builder().count(1L).subject(subjectRepository.findById(subjectId).orElseThrow(() -> new NotFoundException("Subject topilmadi"))).user(systemUser).build());
+            return ResponseEntity.ok(ApiResponse.builder().message("ok").status(200).object(true).build());
+        }
     }
 }

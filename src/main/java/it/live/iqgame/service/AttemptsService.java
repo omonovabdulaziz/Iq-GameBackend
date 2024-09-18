@@ -14,4 +14,5 @@ public interface AttemptsService {
 
     ResponseEntity<ApiResponse> getTTL();
 
+    ResponseEntity<ApiResponse> useKey(Long subjectId);
 }

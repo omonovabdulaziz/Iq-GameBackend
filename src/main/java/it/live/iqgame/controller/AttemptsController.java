@@ -3,6 +3,7 @@ package it.live.iqgame.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.live.iqgame.payload.ApiResponse;
+import it.live.iqgame.payload.AttemptDTOs.AttemptCreateDTO;
 import it.live.iqgame.payload.AttemptDTOs.GetAttemptsDTO;
 import it.live.iqgame.service.AttemptsService;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,22 @@ public class AttemptsController {
             description = "Submits an attempt for a specific question with the user's answer.",
             tags = {"Attempts Management"}
     )
-    @PostMapping("/create/{questionId}")
-    public ResponseEntity<ApiResponse> create(@PathVariable Long questionId, @RequestBody String userAnswer) {
-        return attemptsService.create(questionId, userAnswer);
+    @PostMapping("/create")
+    public ResponseEntity<ApiResponse> create(@RequestBody AttemptCreateDTO attemptCreateDTO) {
+        return attemptsService.create(attemptCreateDTO.getQuestionId(), attemptCreateDTO.getUserAnswer());
     }
+
+    @Operation(
+            summary = "Use Key (Accessible by ROLE_USER)",
+            description = "Submits an attempt for a specific question with the user's answer.",
+            tags = {"Attempts Management"}
+    )
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PostMapping("/useKey/{subjectId}")
+    public ResponseEntity<ApiResponse> useKey(@PathVariable Long subjectId) {
+        return attemptsService.useKey(subjectId);
+    }
+
 
     @Operation(
             summary = "Get all attempts by user ID (Accessible by ROLE_ADMIN)",

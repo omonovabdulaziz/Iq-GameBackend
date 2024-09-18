@@ -18,7 +18,7 @@ public class UserDTO {
     private Long educationId;
     private RoleName roleName;
     private String phoneNumber;
-    private Integer ball;
-    private Integer key;
+    private Long ball;
+    private Long key;
     private String avaName;
 }
