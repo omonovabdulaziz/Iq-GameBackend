@@ -9,6 +9,7 @@ import it.live.iqgame.payload.UserDTOs.UpdateInformationDTO;
 import it.live.iqgame.payload.UserDTOs.UserDTO;
 import it.live.iqgame.repository.AttemptsRepository;
 import it.live.iqgame.repository.EducationRepository;
+import it.live.iqgame.repository.UsedKeyRepository;
 import it.live.iqgame.utils.CalculatingKeyBall;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,7 @@ public class UserMapper {
     private final PasswordEncoder passwordEncoder;
     private final EducationRepository educationRepository;
     private final CalculatingKeyBall calculatingKeyBall;
+    private final UsedKeyRepository usedKeyRepository;
 
     public User toEntityForRegister(RegisterDTO registerDTO) {
         String password = passwordEncoder.encode(registerDTO.getPassword());
@@ -49,8 +51,16 @@ public class UserMapper {
                 .avaName(ownSecurityInformation.getAvaName())
                 .build();
         try {
-            build.setBall(calculatingKeyBall.calculate(QuestionType.TEST, ownSecurityInformation.getId(), subjectId));
-            build.setKey(calculatingKeyBall.calculate(QuestionType.IMAGE, ownSecurityInformation.getId(), subjectId));
+            Long allBalls = calculatingKeyBall.calculate(QuestionType.TEST, ownSecurityInformation.getId(), subjectId);
+            Long allKeys = calculatingKeyBall.calculate(QuestionType.IMAGE, ownSecurityInformation.getId(), subjectId);
+            Long usedKey = 0L;
+            try {
+                usedKey = usedKeyRepository.findByUserIdAndSubjectId(ownSecurityInformation.getId(), subjectId).get().getCount();
+            } catch (Exception e) {
+                usedKey = 0L;
+            }
+            build.setBall(allBalls);
+            build.setKey(allKeys - usedKey);
         } catch (Exception e) {
             build.setBall(null);
             build.setKey(null);
