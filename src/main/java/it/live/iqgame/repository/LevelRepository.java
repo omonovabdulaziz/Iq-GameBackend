@@ -27,4 +27,5 @@ public interface LevelRepository extends JpaRepository<Level, Long> {
     List<GetLevelDTO> findAllByCollectionId(@Param("collectionID") Long collectionID);
 
 
+    Long countAllByCollectionId(Long id);
 }

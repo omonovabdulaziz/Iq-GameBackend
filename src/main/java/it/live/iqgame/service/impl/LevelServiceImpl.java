@@ -2,6 +2,7 @@ package it.live.iqgame.service.impl;
 
 import it.live.iqgame.entity.Collection;
 import it.live.iqgame.entity.Level;
+import it.live.iqgame.exception.MainException;
 import it.live.iqgame.exception.NotFoundException;
 import it.live.iqgame.payload.ApiResponse;
 import it.live.iqgame.payload.LevelDTOs.GetLevelDTO;
@@ -27,6 +28,9 @@ public class LevelServiceImpl implements LevelService {
     @Override
     public ResponseEntity<ApiResponse> create(Long collectionId, String title) {
         Collection collection = collectionRepository.findById(collectionId).orElseThrow(() -> new NotFoundException("Level topilmadi"));
+        if (levelRepository.countAllByCollectionId(collection.getId()) >= 5) {
+            throw new MainException("You cannot create max len 5");
+        }
         levelRepository.save(Level.builder().collection(collection).title(title).build());
         return ResponseEntity.ok(ApiResponse.builder().status(200).message("ok").build());
     }
@@ -45,7 +49,7 @@ public class LevelServiceImpl implements LevelService {
     }
 
     @Override
-    public Page<GetLevelDTO> getAllLevels(int page , int size) {
+    public Page<GetLevelDTO> getAllLevels(int page, int size) {
         return levelRepository.findAllLevels(PageRequest.of(page, size));
     }
 
