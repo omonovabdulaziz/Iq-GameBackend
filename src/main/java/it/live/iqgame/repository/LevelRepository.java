@@ -28,4 +28,5 @@ public interface LevelRepository extends JpaRepository<Level, Long> {
 
 
     Long countAllByCollectionId(Long id);
+
 }
