@@ -51,16 +51,10 @@ public class UserMapper {
                 .avaName(ownSecurityInformation.getAvaName())
                 .build();
         try {
-            Long allBalls = calculatingKeyBall.calculate(QuestionType.TEST, ownSecurityInformation.getId(), subjectId);
-            Long allKeys = calculatingKeyBall.calculate(QuestionType.IMAGE, ownSecurityInformation.getId(), subjectId);
-            Long usedKey = 0L;
-            try {
-                usedKey = usedKeyRepository.findByUserIdAndSubjectId(ownSecurityInformation.getId(), subjectId).get().getCount();
-            } catch (Exception e) {
-                usedKey = 0L;
-            }
-            build.setBall(allBalls);
-            build.setKey(allKeys - usedKey);
+            Long balls = calculatingKeyBall.calculate(QuestionType.TEST, ownSecurityInformation.getId(), subjectId);
+            Long keys = calculatingKeyBall.calculate(QuestionType.IMAGE, ownSecurityInformation.getId(), subjectId);
+            build.setBall(balls);
+            build.setKey(keys);
         } catch (Exception e) {
             build.setBall(null);
             build.setKey(null);

@@ -82,7 +82,7 @@ public class AttemptsServiceImpl implements AttemptsService {
         Optional<UsedKey> optionalUsedKey = usedKeyRepository.findByUserIdAndSubjectId(systemUser.getId(), subjectId);
         Long allKeys = calculatingKeyBall.calculate(QuestionType.IMAGE, systemUser.getId(), subjectId);
         if (allKeys <= 0)
-            throw new MainException("You have not enough key     ");
+            throw new MainException("You have not enough key");
         if (optionalUsedKey.isPresent()) {
             UsedKey usedKey = optionalUsedKey.get();
             long keysUser = allKeys - usedKey.getCount();
