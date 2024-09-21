@@ -62,7 +62,7 @@ public class CollectionController {
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/getAllCollections")
-    public Page<GetCollectionDTO> getAllCollection(@RequestParam int page, @RequestParam int size) {
+    public Page<GetCollectionDTO> getAllCollection(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         return collectionService.getAllCollection(page, size);
     }
 
