@@ -17,7 +17,7 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
     @Query(value = "SELECT new it.live.iqgame.payload.CollectionDTOs.GetCollectionDTO(c.id , c.title , c.description , c.subject.name) FROM Collection c")
     Page<GetCollectionDTO> getAllCollection(Pageable pageable);
 
-    @Query(value = "SELECT new it.live.iqgame.payload.CollectionDTOs.GetCollectionDTO(c.id, c.title, c.description, c.subject.name) FROM Collection c WHERE c.subject.id = :subjectId")
+    @Query(value = "SELECT new it.live.iqgame.payload.CollectionDTOs.GetCollectionDTO(c.id, c.title, c.description, c.subject.name) FROM Collection c WHERE c.subject.id = :subjectId order by c.createdAt asc")
     List<GetCollectionDTO> findAllBySubjectId(@Param("subjectId") Long subjectId);
 
     @Query("SELECT new it.live.iqgame.payload.CollectionDTOs.GetCollectionStudentDTO(c.id, c.title, c.description, c.subject.name, " +
@@ -25,6 +25,6 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
             "FROM Collection c " +
             "LEFT JOIN UserCollection uc ON c.id = uc.collection.id AND uc.user.id = :userId " +
             "WHERE c.subject.id = :subjectId " +
-            "GROUP BY c.id, c.title, c.description, c.subject.name")
+            "GROUP BY c.id, c.title, c.description, c.subject.name order by c.createdAt asc")
     List<GetCollectionStudentDTO> findAllBySubjectIdWhereStudentNotFinished(@Param("subjectId") Long subjectId, @Param("userId") Long userId);
 }
