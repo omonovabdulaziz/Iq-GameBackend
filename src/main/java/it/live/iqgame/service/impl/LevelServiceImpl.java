@@ -39,6 +39,7 @@ public class LevelServiceImpl implements LevelService {
     public ResponseEntity<ApiResponse> update(Long levelId, String title) {
         Level level = levelRepository.findById(levelId).orElseThrow(() -> new NotFoundException("Level topilmadi"));
         level.setTitle(title);
+        levelRepository.save(level);
         return ResponseEntity.ok(ApiResponse.builder().status(200).message("ok").build());
     }
 
