@@ -7,6 +7,7 @@ import it.live.iqgame.payload.ApiResponse;
 import it.live.iqgame.payload.QuestionDTOs.*;
 import it.live.iqgame.service.QuestionsService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Request;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,8 @@ public class QuestionsController {
     @PostMapping(value = "/add/{type}/{levelId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> createQuestion(
             @PathVariable QuestionType type,
-            @RequestParam(required = false) MultipartFile file,
             @PathVariable Long levelId,
+            @RequestParam(required = false) MultipartFile file,
             @RequestParam(required = false) List<String> additiveAnswer,
             @RequestParam String correctAnswer,
             @RequestParam String questionValue) {
@@ -57,11 +58,14 @@ public class QuestionsController {
             @RequestParam(required = false) MultipartFile file,
             @RequestParam String correctAnswer,
             @RequestParam(required = false) List<String> additiveAnswer,
-            @RequestParam QuestionType questionType) {
+            @RequestParam QuestionType questionType,
+            @RequestParam String questionValue
+    ) {
         return questionsService.updateQuestion(questionId, file, UpdateQuestionDTO.builder()
                 .additiveAnswer(additiveAnswer)
                 .correctAnswer(correctAnswer)
                 .questionType(questionType)
+                .questionValue(questionValue)
                 .build());
     }
 
