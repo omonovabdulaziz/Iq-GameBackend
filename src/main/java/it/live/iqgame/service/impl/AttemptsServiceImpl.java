@@ -85,10 +85,6 @@ public class AttemptsServiceImpl implements AttemptsService {
             throw new MainException("You have not enough key");
         if (optionalUsedKey.isPresent()) {
             UsedKey usedKey = optionalUsedKey.get();
-            long keysUser = allKeys - usedKey.getCount();
-            if (keysUser <= 0) {
-                throw new MainException("You have not enough key");
-            }
             usedKey.setCount(usedKey.getCount() + 1);
             usedKeyRepository.save(usedKey);
             return ResponseEntity.ok(ApiResponse.builder().message("ok").status(200).object(true).build());
