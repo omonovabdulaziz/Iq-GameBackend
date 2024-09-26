@@ -54,7 +54,7 @@ public class UserMapper {
             Long balls = calculatingKeyBall.calculate(QuestionType.TEST, ownSecurityInformation.getId(), subjectId);
             Long keys = calculatingKeyBall.calculate(QuestionType.IMAGE, ownSecurityInformation.getId(), subjectId);
             build.setBall(balls);
-            build.setKey(keys);
+            build.setKey(keys - 1);
         } catch (Exception e) {
             build.setBall(null);
             build.setKey(null);
