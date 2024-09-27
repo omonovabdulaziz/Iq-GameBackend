@@ -2,6 +2,7 @@ package it.live.iqgame.service.impl;
 
 import it.live.iqgame.config.SecurityConfiguration;
 import it.live.iqgame.entity.User;
+import it.live.iqgame.exception.MainException;
 import it.live.iqgame.exception.NotFoundException;
 import it.live.iqgame.jwt.JwtProvider;
 import it.live.iqgame.mapper.UserMapper;
@@ -35,6 +36,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<ApiResponse> register(RegisterDTO registerDTO) {
+        if (userRepository.findByPhoneNumber(registerDTO.getPhoneNumber()).isPresent()) {
+            throw new MainException("Phone number already exist");
+        }
         User user = userRepository.save(userMapper.toEntityForRegister(registerDTO));
         String token = jwtProvider.generateToken(user);
         return ResponseEntity.ok(ApiResponse.builder().message("ok").status(200).object(token).build());

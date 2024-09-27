@@ -26,7 +26,6 @@ public class UserMapper {
     public User toEntityForRegister(RegisterDTO registerDTO) {
         String password = passwordEncoder.encode(registerDTO.getPassword());
         return User.builder().name(registerDTO.getName()).education(educationRepository.findById(registerDTO.getEducId()).orElseThrow(() -> new NotFoundException("Education Topilmadi"))).roleName(RoleName.USER).password(password).region(registerDTO.getRegion()).surname(registerDTO.getSurname()).phoneNumber(registerDTO.getPhoneNumber()).build();
-
     }
 
     public User toEntityForUpdateInformation(User ownSecurityInformation, UpdateInformationDTO updateInformationDTO) {
