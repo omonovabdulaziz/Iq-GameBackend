@@ -122,7 +122,31 @@ public class UserController {
     )
     @GetMapping("/getFiles/{filename}")
     public ResponseEntity<?> getFile(@PathVariable String filename) throws MalformedURLException {
-        String filePath = "app/uploads/DOCUMENTS" + URLEncoder.encode(filename, StandardCharsets.UTF_8);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filePath + "\"").body(new FileUrlResource(filePath));
+        // Define the full path to the file
+        String filePath = "/app/uploads/DOCUMENTS/" + URLEncoder.encode(filename, StandardCharsets.UTF_8);
+
+        // Create a File object to check if the file exists
+        Path file = Paths.get(filePath);
+        if (!Files.exists(file)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found: " + filename);
+        }
+
+        // Determine the content type dynamically
+        String contentType;
+        try {
+            contentType = Files.probeContentType(file);
+            if (contentType == null) {
+                contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+            }
+        } catch (IOException e) {
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
+
+        // Return the file as a response
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
+                .body(new FileUrlResource(file.toUri()));
     }
+
 }
