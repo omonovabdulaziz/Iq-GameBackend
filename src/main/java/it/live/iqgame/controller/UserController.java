@@ -122,7 +122,7 @@ public class UserController {
     )
     @GetMapping("/getFiles/{filename}")
     public ResponseEntity<?> getFile(@PathVariable String filename) throws MalformedURLException {
-        String filePath = "/app/uploads/DOCUMENTS" + URLEncoder.encode(filename, StandardCharsets.UTF_8);
+        String filePath = "app/uploads/DOCUMENTS" + URLEncoder.encode(filename, StandardCharsets.UTF_8);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filePath + "\"").body(new FileUrlResource(filePath));
     }
 }
