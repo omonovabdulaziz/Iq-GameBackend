@@ -31,7 +31,7 @@ public class DataLoaderConfig implements CommandLineRunner {
             Education otm = educationRepository.save(Education.builder().name("OTM").build());
             educationRepository.save(Education.builder().name("MAKTAB").build());
             educationRepository.save(Education.builder().name("KOLLEJ").build());
-            userRepository.save(User.builder().name("Doniyor").surname("Jonibekov").roleName(RoleName.ADMIN).education(otm).phoneNumber("+998994768495").region(Region.SIRDARYO).password(passwordEncoder.encode("itlive123")).build());
+                userRepository.save(User.builder().name("Doniyor").surname("Jonibekov").roleName(RoleName.ADMIN).education(otm).phoneNumber("998994768495").region(Region.SIRDARYO).password(passwordEncoder.encode("itlive123")).build());
             jdbcConnector.rating_calculation_func();
             System.out.println("MALUMOTLAR SAQLANDI");
         }
