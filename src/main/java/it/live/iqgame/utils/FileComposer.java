@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Service
 public class FileComposer {
-    private static final String MAIN_UPLOAD_DIRECTORY = "DOCUMENTS";
+    private static final String MAIN_UPLOAD_DIRECTORY = "/app/uploads/DOCUMENTS";
 
     public static String imageUploader(MultipartFile multipartFile) {
         // Validate content type
