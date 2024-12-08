@@ -122,44 +122,7 @@ public class UserController {
     )
     @GetMapping("/getFiles/{filename}")
     public ResponseEntity<?> getFile(@PathVariable String filename) throws MalformedURLException {
-        // Define the full path to the file
-        String filePath = "/app/uploads/DOCUMENTS/" + URLEncoder.encode(filename, StandardCharsets.UTF_8);
-
-        // Log the resolved file path for debugging
-        System.out.println("Resolved file path: " + filePath);
-
-        // Create a File object to check if the file exists
-        Path file = Paths.get(filePath);
-        if (!Files.exists(file)) {
-            System.err.println("File not found: " + filePath); // Log if the file is not found
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found: " + filename);
-        }
-
-        // Log file existence
-        System.out.println("File exists. Preparing to serve the file.");
-
-        // Determine the content type dynamically
-        String contentType;
-        try {
-            contentType = Files.probeContentType(file);
-            if (contentType == null) {
-                contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
-            }
-            // Log the detected content type
-            System.out.println("Detected content type: " + contentType);
-        } catch (IOException e) {
-            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
-            System.err.println("Error detecting content type: " + e.getMessage());
-        }
-
-        // Log response preparation
-        System.out.println("Serving file with content type: " + contentType);
-
-        // Return the file as a response
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
-                .body(new FileUrlResource(file.toUri()));
+        String filePath = "app/uploads/DOCUMENTS" + URLEncoder.encode(filename, StandardCharsets.UTF_8);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filePath + "\"").body(new FileUrlResource(filePath));
     }
-
 }
