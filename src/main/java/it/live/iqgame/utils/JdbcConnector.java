@@ -48,8 +48,8 @@ public class JdbcConnector {
                             u.name,
                             u.surname,
                             u.region,
-                            GREATEST(CAST(FLOOR((ats.ball_count * 50.0) / 75 + (ats.key_count * 50.0) / 15 - ats.total_attempts) AS INTEGER), 0) AS iq,
-                            CAST(FLOOR((ats.ball_count * 50.0) / 75 + (ats.key_count * 50.0) / 15) AS INTEGER) AS percent,
+                            GREATEST(CAST(FLOOR((ats.ball_count * 50.0) / 15 + (ats.key_count * 50.0) / 15 - ats.total_attempts) AS INTEGER), 0) AS iq,
+                            CAST(FLOOR((ats.ball_count * 50.0) / 15 + (ats.key_count * 50.0) / 15) AS INTEGER) AS percent,
                             ats.ball_count,
                             ats.key_count,
                             ats.total_attempts
