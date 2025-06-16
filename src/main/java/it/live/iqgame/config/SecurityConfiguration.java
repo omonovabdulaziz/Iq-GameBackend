@@ -38,13 +38,28 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors(cors -> cors.configurationSource(request -> {
-                    CorsConfiguration corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.addAllowedOrigin("*");
-                    corsConfiguration.addAllowedMethod("*");
-                    corsConfiguration.addAllowedHeader("*");
-                    return corsConfiguration;
-                })).
-                csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/**", "/v2/api-docs", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html").permitAll().anyRequest().authenticated());
+            CorsConfiguration corsConfiguration = new CorsConfiguration();
+            corsConfiguration.setAllowCredentials(true);
+            corsConfiguration.addAllowedOriginPattern("*");
+            corsConfiguration.addAllowedMethod("*");
+            corsConfiguration.addAllowedHeader("*");
+            corsConfiguration.setMaxAge(3600L);
+            return corsConfiguration;
+        }))
+        .csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(auth -> auth.requestMatchers(
+                "/api/v1/**",
+                "/v2/api-docs",
+                "/v3/api-docs",
+                "/v3/api-docs/**",
+                "/swagger-resources",
+                "/swagger-resources/**",
+                "/configuration/ui",
+                "/configuration/security",
+                "/swagger-ui/**",
+                "/webjars/**",
+                "/swagger-ui.html"
+        ).permitAll().anyRequest().authenticated());
         httpSecurity.sessionManagement(httpsecure -> httpsecure.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authenticationProvider(authenticationProvider);
         httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
